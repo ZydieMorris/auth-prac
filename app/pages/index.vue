@@ -20,8 +20,6 @@
 
 <script setup lang="ts">
 
-const toast = useToast();
-
 definePageMeta({
   middleware: 'guest'
 })

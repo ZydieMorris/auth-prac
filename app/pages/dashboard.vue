@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { Trash } from 'lucide-vue-next';
+
 
 
 
@@ -13,6 +15,7 @@ async function addFruit() {
             }
         })
 
+        showFruit();
     } catch (error) {
         console.log('Failed to add fruit');
     }
@@ -37,7 +40,21 @@ async function showFruit() {
 
 onMounted(() => {
     showFruit();
-})
+});
+
+
+
+async function deleteFruit(id: number) {
+  try {
+    await $fetch(`/api/fruits/${id}`, {
+      method: 'DELETE'
+    });
+    // remove deleted fruit from local list (no need to refresh)
+    fruits.value = fruits.value.filter(fruit => fruit.id !== id);
+  } catch (error) {
+    console.error('Failed to delete fruit:', error);
+  }
+}
 
 </script>
 
@@ -50,11 +67,20 @@ onMounted(() => {
         </form>
 
 
-        <ul class="text-white text-center pt-40" >
-            <li v-for="fruit in fruits" :key="fruit.id">{{ fruit.fruitName }}</li>
+        <div class="text-black text-center pt-40 flex" >
 
+            <div class="space-x-5">
+                    <div v-for="fruit in fruits" :key="fruit.id">{{ fruit.fruitName }} 
+                    <Button @click="deleteFruit(fruit.id)"><Trash /></Button> 
+                    </div> 
+
+            </div>
             
-        </ul>
+          
+                
+
+               
+        </div>
 
     </NuxtLayout>
 </template>
