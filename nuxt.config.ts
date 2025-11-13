@@ -10,7 +10,9 @@ export default defineNuxtConfig({
     "@nuxt/image",
     "@nuxt/scripts",
     "@nuxt/test-utils",
+    "@nuxt/ui",
     "shadcn-nuxt",
+    "nuxt-auth-utils",
   ],
   css: ["~/assets/css/tailwind.css"],
   vite: {

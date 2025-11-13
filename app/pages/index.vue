@@ -1,13 +1,53 @@
 <template>
   <div>
-    <Button>Hello</Button>
-    <p class="font-roboto">
-      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Alias quam
-      tempora consequatur. Excepturi non delectus voluptatibus aperiam at
-      assumenda voluptatum veritatis, sapiente voluptates ex consequatur sint
-      distinctio molestias id neque.
-    </p>
+
+    <form @submit.prevent="logInUser" class="flex flex-col items-center space-y-5 justify-center pt-50">
+
+      <Label>Email</Label>
+      <Input v-model="email" class="w-100" />
+
+      <Label>Password</Label>
+      <Input v-model="password" type="password" class="w-100" />
+      <div v-if="message">{{ message }}</div>
+
+      <Button type="submit">Login</Button>
+      <NuxtLink to="/register"><Button>Register</Button></NuxtLink>
+
+    </form>
+
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+
+const toast = useToast();
+
+definePageMeta({
+  middleware: 'guest'
+})
+
+const email = ref('');
+const password = ref('');
+const message = ref('');
+
+async function logInUser() {
+  try {
+    await $fetch('/api/auth/login', {
+      method: 'POST',
+      body: {
+        email: email.value,
+        password: password.value
+      }
+    })
+
+    
+    window.location.href = '/dashboard';
+
+  } catch (error: any) {
+    console.log('Login failed');
+    message.value = error?.data?.statusMessage || 'Login failed';
+
+  }
+}
+
+</script>
