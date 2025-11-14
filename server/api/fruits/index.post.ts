@@ -2,7 +2,7 @@ import { fruits } from "~~/server/database/schemas";
 import { z } from "zod";
 
 const fruitSchema = z.object({
-  fruitName: z.string().min(1).max(255),
+  fruitName: z.string().max(255),
 });
 
 // Define the shape we expect
@@ -14,6 +14,13 @@ interface SessionUser {
 
 export default defineEventHandler(async (event) => {
   const body = await readValidatedBody(event, fruitSchema.parse);
+
+  if(body.fruitName.length === 0) {
+    throw createError({
+      statusCode: 400,
+      statusMessage: "Enter a fruit name",
+    });
+  }
 
   // Cast session safely
   const session = await requireUserSession(event) as unknown as { user: SessionUser };

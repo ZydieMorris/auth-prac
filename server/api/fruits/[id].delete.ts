@@ -2,6 +2,7 @@ import { eq } from "drizzle-orm";
 import { fruits } from "~~/server/database/schemas";
 
 export default defineEventHandler(async (event) => {
+
   const id = Number(event.context.params?.id);
 
   if (!id) {
@@ -15,3 +16,4 @@ export default defineEventHandler(async (event) => {
 
   return { message: "Fruit deleted successfully" };
 });
+
